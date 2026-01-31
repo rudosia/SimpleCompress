@@ -1,4 +1,4 @@
-SimplleCompress Module
+SimpleCompress Module
 Created by: park_112/rudosia
 
 A high performance compression utility for Roblox using native Buffers and Zstd.

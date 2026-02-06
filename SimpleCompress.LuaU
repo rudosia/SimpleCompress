@@ -15,7 +15,7 @@
 
 	Usage:
 
-	Compression.Compress(args: Input, Level)
+	SimpleCompression.Compress(args: Input, Level)
 		- Serializes and compresses data into a memory-efficient buffer.
 		- Args:
 			* Input (string | number | boolean | table) - The data to be compressed.
@@ -23,7 +23,7 @@
 		- Returns:
 			* buffer - The compressed data.
 
-	Compression.Decompress(args: CompressedBuffer)
+	SimpleCompression.Decompress(args: CompressedBuffer)
 		- Reverses the compression and restores the original data type.
 		- Args:
 			* CompressedBuffer (buffer) - The buffer returned by the Compress function.
@@ -32,15 +32,15 @@
 
 	Types:
 
-	Compression.Compressible
+	SimpleCompression.Compressible
 		- A union type representing all valid data types the module can process.
 
-	Compression.CompressionLevel
+	SimpleCompression.CompressionLevel
 		- A number range from 0 (lowest/fastest) to 3 (highest/slowest).
 
 	Usage Example:
 
-	local Compression = require(path.To.Compression)
+	local SimpleCompression = require(path.To.SimpleCompression)
 
 	-- Compressing a complex table
 	local Inventory = {
@@ -49,15 +49,15 @@
 		Settings = { MusicVolume = 0.5, Muted = false }
 	}
 
-	local CompressedData = Compression.Compress(Inventory)
+	local CompressedData = SimpleCompression.Compress(Inventory)
 	print("Size in bytes:", buffer.len(CompressedData))
 
 	-- Decompressing the data
-	local OriginalData = Compression.Decompress(CompressedData)
+	local OriginalData = SimpleCompression.Decompress(CompressedData)
 	print("Item 1:", OriginalData.Items[1]) -- Output: Sword
 
 	-- Compressing a simple string at a lower level
-	local MessageBuffer = Compression.Compress("Hello World", 1)
+	local MessageBuffer = SimpleCompression.Compress("Hello World", 1)
 
 --]]
 
@@ -67,9 +67,9 @@ local EncodingService = game:GetService("EncodingService")
 export type Compressible = string | number | boolean | { [any]: any }
 export type CompressionLevel = number -- 0 to 3
 
-local Compression = {}
+local SimpleCompression = {}
 
-function Compression.Compress(Input: Compressible, Level: CompressionLevel?): buffer
+function SimpleCompression.Compress(Input: Compressible, Level: CompressionLevel?): buffer
 
 	local SelectedLevel: number = Level or 3
 	local IsTable: boolean = type(Input) == "table"
@@ -93,7 +93,7 @@ function Compression.Compress(Input: Compressible, Level: CompressionLevel?): bu
 	return Result
 end
 
-function Compression.Decompress(CompressedBuffer: buffer): any
+function SimpleCompression.Decompress(CompressedBuffer: buffer): any
 	local Success, Result = pcall(function()
 		return EncodingService:DecompressBuffer(CompressedBuffer, Enum.CompressionAlgorithm.Zstd)
 	end)
@@ -117,4 +117,4 @@ function Compression.Decompress(CompressedBuffer: buffer): any
 	return DataString
 end
 
-return Compression
+return SimpleCompression :: typeof(SimpleCompression)
